@@ -12,7 +12,7 @@ import java.time.Instant;
 
 @Data
 @MappedSuperclass
-public class BaseEntity {
+public class BaseModel {
 
     @Id
     @UuidGenerator

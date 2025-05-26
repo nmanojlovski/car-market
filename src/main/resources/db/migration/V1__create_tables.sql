@@ -26,7 +26,7 @@ CREATE TABLE account(
     username varchar(40) not null,
     email varchar(40) not null,
     password varchar(40) not null,
-    customer_id varchar(36) not null,
+    customer_id varchar(36),
     created_at timestamp not null,
     updated_at timestamp not null
 

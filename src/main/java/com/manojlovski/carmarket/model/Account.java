@@ -1,6 +1,6 @@
 package com.manojlovski.carmarket.model;
 
-import com.manojlovski.carmarket.model.base.BaseEntity;
+import com.manojlovski.carmarket.model.base.BaseModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Data
 @Entity
 @Table(name = "account")
-public class Account extends BaseEntity {
+public class Account extends BaseModel {
 
     @Column(nullable = false)
     private String username;
@@ -23,7 +23,7 @@ public class Account extends BaseEntity {
     private String password;
 
     @OneToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 
 }

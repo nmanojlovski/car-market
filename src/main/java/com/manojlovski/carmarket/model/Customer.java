@@ -1,6 +1,6 @@
 package com.manojlovski.carmarket.model;
 
-import com.manojlovski.carmarket.model.base.BaseEntity;
+import com.manojlovski.carmarket.model.base.BaseModel;
 import com.manojlovski.carmarket.model.enums.SellerType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "customer")
-public class Customer extends BaseEntity {
+public class Customer extends BaseModel {
 
     @Column(nullable = false)
     private String name;
