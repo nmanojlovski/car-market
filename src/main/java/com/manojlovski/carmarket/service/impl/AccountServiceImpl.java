@@ -71,9 +71,17 @@ public class AccountServiceImpl implements AccountService {
 
     private AccountResponse mapToAccountResponse(Account account) {
         AccountResponse accountResponse = new AccountResponse();
+        accountResponse.setId(account.getId());
         accountResponse.setUsername(account.getUsername());
         accountResponse.setEmail(account.getEmail());
-        accountResponse.setCustomerId(account.getCustomer().getId());
+
+        if (account.getCustomer() != null) {
+            accountResponse.setCustomerId(account.getCustomer().getId());
+        }
+
+        accountResponse.setCreatedAt(account.getCreatedAt());
+        accountResponse.setUpdatedAt(account.getUpdatedAt());
+
         return accountResponse;
     }
 
