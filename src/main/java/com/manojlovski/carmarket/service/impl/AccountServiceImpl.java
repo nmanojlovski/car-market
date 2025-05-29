@@ -8,6 +8,7 @@ import com.manojlovski.carmarket.model.Customer;
 import com.manojlovski.carmarket.repository.AccountRepository;
 import com.manojlovski.carmarket.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

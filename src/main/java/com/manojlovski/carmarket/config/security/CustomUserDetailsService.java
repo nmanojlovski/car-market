@@ -1,5 +1,7 @@
 package com.manojlovski.carmarket.config.security;
 
+
+import com.manojlovski.carmarket.config.security.user.CustomUserDetails;
 import com.manojlovski.carmarket.model.Account;
 import com.manojlovski.carmarket.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,10 +19,30 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        return User.builder()
-                .username(account.getUsername())
-                .password(account.getPassword())
-                .build();
+                  .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        return mapToCustomUserDetails(account);
     }
+
+    private CustomUserDetails mapToCustomUserDetails(Account account) {
+        CustomUserDetails userDetails = new CustomUserDetails();
+        userDetails.setAccountId(account.getId());
+        userDetails.setUsername(account.getUsername());
+        userDetails.setEmail(account.getEmail());
+        userDetails.setPassword(account.getPassword());
+        userDetails.setCustomerId(account.getCustomer() != null ? account.getCustomer().getId() : null);
+        return userDetails;
+    }
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        Account account = accountRepository.findByUsername(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//        CustomUserDetails userDetails = new CustomUserDetails();
+//        userDetails.setAccountId(account.getId());
+//        userDetails.setUsername(account.getUsername());
+//        userDetails.setEmail(account.getEmail());
+//        userDetails.setPassword(account.getPassword());
+//        userDetails.setCustomerId(account.getCustomer() != null ? account.getCustomer().getId() : null);
+//        return userDetails;
+//    }
 }
