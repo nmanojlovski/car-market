@@ -1,5 +1,6 @@
 package com.manojlovski.carmarket.service.impl;
 
+import com.manojlovski.carmarket.config.exception.ConflictException;
 import com.manojlovski.carmarket.config.exception.NotFoundException;
 import com.manojlovski.carmarket.config.security.context.SecurityContext;
 import com.manojlovski.carmarket.dto.request.CustomerRequest;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.stream.Collectors;
 
@@ -28,6 +30,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerResponse createCustomer(CustomerRequest customerRequest) {
+
+        String accountId = securityContext.getPrincipal().getAccountId();
+        Account account = accountRepository.findById(accountId).orElseThrow(
+                () -> new NotFoundException("Account with the id: " + accountId + " not found")
+        );
+        if (account.getCustomer() != null) {
+            throw new ConflictException("Account with the id: " + accountId + " already has a customer associated with it.");
+        }
+
+
         Customer customer = new Customer();
         customer.setName(customerRequest.getName());
         customer.setAddress(customerRequest.getAddress());
@@ -35,15 +47,14 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setSellerType(customerRequest.getSellerType());
         customerRepository.save(customer);
 
-        String accountId = securityContext.getPrincipal().getAccountId();
-        Account account = accountRepository.findById(accountId).orElseThrow(
-                () -> new NotFoundException("Account with the id: " + accountId + " not found")
-        );
+
         account.setCustomer(customer);
         accountRepository.save(account);
 
         return mapToCustomerResponse(customer);
     }
+
+
 
     private CustomerResponse mapToCustomerResponse(Customer customer) {
         CustomerResponse customerResponse = new CustomerResponse();
