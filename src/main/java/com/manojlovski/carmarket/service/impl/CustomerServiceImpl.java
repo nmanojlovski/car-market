@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,7 +55,38 @@ public class CustomerServiceImpl implements CustomerService {
         return mapToCustomerResponse(customer);
     }
 
+    @Override
+    public CustomerResponse updateCustomer(String id, CustomerRequest customerRequest) {
+        Customer customer = customerRepository.findById(id).orElseThrow(()->
+                new NotFoundException("Customer with the id: " + id + " not found")
+        );
+        customer.setName(customerRequest.getName());
+        customer.setAddress( customerRequest.getAddress());
+        customer.setPhone(customerRequest.getPhone());
+        customer.setSellerType(customerRequest.getSellerType());
+        customerRepository.save(customer);
 
+        return mapToCustomerResponse(customer);
+    }
+
+    @Override
+    public CustomerResponse findById(String id) {
+        Customer customer = customerRepository.findById(id).orElseThrow(()->
+                new NotFoundException("Customer with the id: " + id + " not found")
+        );
+        return mapToCustomerResponse(customer);
+
+    }
+
+    @Override
+    public void deleteCustomer(String id) {
+        customerRepository.deleteById(id);
+    }
+
+    @Override
+    public List<CustomerResponse> listCustomers() {
+        return customerRepository.findAll().stream().map(this::mapToCustomerResponse).toList();
+    }
 
     private CustomerResponse mapToCustomerResponse(Customer customer) {
         CustomerResponse customerResponse = new CustomerResponse();

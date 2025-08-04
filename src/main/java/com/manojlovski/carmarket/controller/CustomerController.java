@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/customers")
@@ -21,5 +23,25 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerResponse createCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
         return customerService.createCustomer(customerRequest);
+    }
+
+    @PutMapping("/{id}")
+    public CustomerResponse updateCustomer(@PathVariable String id,@RequestBody @Valid CustomerRequest customerRequest) {
+        return customerService.updateCustomer(id, customerRequest);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteCustomer(@PathVariable String id) {
+        customerService.deleteCustomer(id);
+    }
+
+    @GetMapping("/{id}")
+    public CustomerResponse getCustomer(@PathVariable String id) {
+        return customerService.findById(id);
+    }
+
+    @GetMapping
+    public List<CustomerResponse> getAllCustomers() {
+        return customerService.listCustomers();
     }
 }
